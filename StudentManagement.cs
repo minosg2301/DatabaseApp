@@ -32,13 +32,44 @@ namespace DatabaseApp
             if (string.IsNullOrEmpty(studentIDbox.Text)) MessageBox.Show("Please Enter a Student ID.");
             else
             {
-                cmd.CommandText = "Insert into student values ('" + studentIDbox.Text + "','" + fnameBox.Text + "','" + mnameBox.Text + "','" + lnameBox.Text + "','" + sex + "','" + IDNumBox.Text +
-                   "','" + nationBox.Text + "','" + startYear.Text + "','" + null + "','" + addressBox.Text + "','" + dateTimePicker1.Value + "','" + deptIDBox.Text + "','" + majorBox.Text + "','" + classIDBox.Text + "')";
-                dateTimePicker1.CustomFormat = "dd-MM-yyyy";
-                cmd.ExecuteNonQuery();
-                display_data();
-                con.Close();
-                MessageBox.Show("Succesfully Inserted!");
+                if (classIDBox.Text != "CH1801" && classIDBox.Text != "MO18KH01" && classIDBox.Text != "MT18KH01" && classIDBox.Text != "MT18KH02" && classIDBox.Text != "MT18KH03" &&
+                classIDBox.Text != "MT18KH04" && classIDBox.Text != "MT18KH05" && classIDBox.Text != "MT18KHTN" && classIDBox.Text != "MT18KT" && classIDBox.Text != "MT18KTTN" &&
+                classIDBox.Text != "UD18KH01")
+                {
+                    con.Close();
+                    MessageBox.Show("Please enter the correct existing class ID.");
+                }
+                else
+                {
+                    if (deptIDBox.Text.Length > 3 || (deptIDBox.Text != "cse" && deptIDBox.Text != "dce" && deptIDBox.Text != "dch" && deptIDBox.Text != "dee" && deptIDBox.Text != "dte" &&
+                    deptIDBox.Text != "enr" && deptIDBox.Text != "fas" && deptIDBox.Text != "fme" && deptIDBox.Text != "fmt" && deptIDBox.Text != "gpe" && deptIDBox.Text != "hea" &&
+                    deptIDBox.Text != "iut" && deptIDBox.Text != "sim"))
+                    {
+                        con.Close();
+                        MessageBox.Show("Please enter the correct departmentID.");
+                    }
+                    else
+                    {
+                        SqlDataAdapter da = new SqlDataAdapter("Select student_id from student where student_id = '" + studentIDbox.Text + "'", con);
+                        DataTable dt = new DataTable();
+                        da.Fill(dt);
+                        if (dt.Rows.Count >= 1)
+                        {
+                            con.Close();
+                            MessageBox.Show("Student ID already exists.");
+                        }
+                        else
+                        {
+                            cmd.CommandText = "Insert into student values ('" + studentIDbox.Text + "','" + fnameBox.Text + "','" + mnameBox.Text + "','" + lnameBox.Text + "','" + sex + "','" + IDNumBox.Text +
+                            "','" + nationBox.Text + "','" + startYear.Text + "','" + null + "','" + addressBox.Text + "','" + dateTimePicker1.Value + "','" + deptIDBox.Text + "','" + majorBox.Text + "','" + classIDBox.Text + "')";
+                            dateTimePicker1.CustomFormat = "dd-MM-yyyy";
+                            cmd.ExecuteNonQuery();
+                            display_data();
+                            con.Close();
+                            MessageBox.Show("Succesfully Inserted!");
+                        }
+                    }
+                }
             }
         }
         public void display_data()
@@ -337,6 +368,11 @@ namespace DatabaseApp
                 e.Cancel = false;
                 errorProvider1.SetError(btnFemale, null);
             }
+        }
+
+        private void btnCancel_Click(object sender, EventArgs e)
+        {
+            this.Close();
         }
     }
 }

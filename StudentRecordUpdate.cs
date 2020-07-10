@@ -95,5 +95,10 @@ namespace DatabaseApp
             this.Hide();
             f1.ShowDialog();
         }
+
+        private void btnCancel_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
     }
 }
